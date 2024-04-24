@@ -1,0 +1,19 @@
+<div class="property-container">
+    <div class="property-image">
+        <img [src]="bien.image" alt="property">
+    </div>
+
+    <div class="property-info">
+        <h4>Location</h4>
+        <p>{{ bien.rue }},{{ bien.commune }}</p>
+        <h4>Nombre de Couchages</h4>
+        <p>{{ bien.nbCouchages }}</p>
+        <h4>Nombre de Chambres</h4>
+        <p>{{bien.nbChambres}}</p>
+        <h4>Distance au Centre-ville</h4>
+        <p>{{ bien.distance }} mètres</p>
+        <h4>Prix</h4>
+        <p>{{bien.prix | currency:'EUR'}}</p>
+        <button>Réserver</button>
+    </div>
+</div>

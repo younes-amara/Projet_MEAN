@@ -1,0 +1,38 @@
+<div id="slideBox">
+    <div class="topLayer">
+        <div class="right">
+            <div class="content">
+                <h2>Login</h2>
+                <form id="form-login" method="post" [formGroup]="loginFormGroup">
+                    <div formGroupName="login">
+                        <div class="form-element form-stack">
+                            <label for="login" class="form-label">Username</label>
+                            <input id="login" type="text" formControlName="login" name="login" autocomplete="off"/>
+                            <div *ngIf="login?.invalid && (login?.dirty || login?.touched)">
+                                <div *ngIf="login?.errors?.['required'] || login?.errors?.['notOnlyWhiteSpace']" class="error" style="color: crimson">
+                                    login is required
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-element form-stack">
+                            <label for="password" class="form-label">Password</label>
+                            <input id="password" type="password" name="password" formControlName="password"/>
+                            <div *ngIf="password?.invalid && (password?.dirty || password?.touched)">
+                                <div *ngIf="password?.errors?.['required'] || password?.errors?.['notOnlyWhiteSpace']"
+                                     style="color: crimson" class="error">
+                                    password is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-element form-submit">
+                        <button class="login" type="submit" name="login" (click)="onSubmit()">
+                            Log In
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

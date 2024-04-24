@@ -1,0 +1,69 @@
+<div class="property-list-container">
+    <div class="row wrap gap-1 space-between" style="display: flex;
+    justify-content: space-around;" *ngIf="biensList.length;else skeleton">
+
+        <div class="bien-container" *ngFor="let bien of biensList">
+            <section class="hotel-card">
+                <img class="hotel-image" [src]="bien.image" alt="" routerLink="/properties/{{bien.idBien}}"/>
+                <h2 class="hotel-title">{{ bien.rue }},{{ bien.commune }}</h2>
+                <p class="hotel-description">
+                    {{ bien.nbChambres }}<span *ngIf="bien.nbChambres===1;else elseBlock"> Chambre</span>
+                    <ng-template #elseBlock> Chambres</ng-template>
+                </p>
+                <div class="hotel-book">
+                    <span class="hotel-price">{{ bien.prix | currency:'EUR' }} <span style="font-weight: normal">par nuit</span></span>
+                    <a href="" class="hotel-book-link" routerLink="">
+                        Réserver
+                    </a>
+                </div>
+            </section>
+        </div>
+
+    </div>
+    <ng-template #skeleton>
+        <div style="    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;justify-items: center">
+            <div *ngFor="let item of items" style="margin-top: 40px">
+                <ngx-skeleton-loader
+                        count="1"
+                        animation="progress"
+                        [theme]="{
+                    height: '344px',
+                    width: '327px',
+                    'border-radius':'15px'
+
+                }"
+                ></ngx-skeleton-loader>
+                <ngx-skeleton-loader
+                        count="1"
+                        animation="progress"
+                        [theme]="{
+                    width: '50%',
+                    'display':'block'
+                }"
+                ></ngx-skeleton-loader>
+                <ngx-skeleton-loader
+                        count="1"
+                        animation="progress"
+                        [theme]="{
+                    width: '20%',
+                    'display':'block'
+                }"
+                ></ngx-skeleton-loader>
+                <div>
+                    <ngx-skeleton-loader
+                            count="1"
+                            animation="progress"
+                            [theme]="{
+                    width: '30%',
+
+                }"
+                    ></ngx-skeleton-loader>
+
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+
+</div>

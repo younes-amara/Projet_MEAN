@@ -15,18 +15,16 @@ import {MatPaginator} from "@angular/material/paginator";
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [RouterOutlet, HeaderComponent, FooterComponent, FormSearchComponent, CommonModule, PropertyListComponent, PaginatorModule, PropertyDetailComponent, ConnexionComponent, MatPaginator],
+    imports: [RouterOutlet,HeaderComponent, FooterComponent, FormSearchComponent, CommonModule, PropertyListComponent, PaginatorModule, PropertyDetailComponent, ConnexionComponent, MatPaginator],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'
 })
 export class AppComponent {
     title = 'frontEnd';
 
-    constructor(private router: Router, private biensService: BiensService) {
+    constructor() {
     }
 
-    totalRecords: number = 20;
-    rows: number = 6;
 
     // fetchBiens(page: number, perPage: number) {
     //     this.biensService.getBiens('http://localhost:8888/biens', {page, perPage}).subscribe((biens: Biens) => {

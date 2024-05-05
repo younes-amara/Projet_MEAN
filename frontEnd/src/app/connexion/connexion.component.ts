@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthentificationService} from '../services/authentification.service';
-import {RouterOutlet} from '@angular/router';
+import {Router, RouterOutlet} from '@angular/router';
 import {HeaderComponent} from '../layout/header/header.component';
 import {FooterComponent} from '../layout/footer/footer.component';
 import {FormSearchComponent} from '../form-search/form-search.component';
@@ -20,10 +20,10 @@ import Swal from "sweetalert2";
     templateUrl: './connexion.component.html',
     styleUrls: ['./connexion.component.scss']
 })
-export class ConnexionComponent {
+export class ConnexionComponent implements OnInit{
     loginFormGroup!: FormGroup;
 
-    constructor(private formBuilder: FormBuilder, private auth: AuthentificationService) {
+    constructor(private router:Router,private formBuilder: FormBuilder, private auth: AuthentificationService) {
     }
 
     ngOnInit(): void {
@@ -38,7 +38,6 @@ export class ConnexionComponent {
 
         let credentials: Credentials;
         credentials = this.loginFormGroup.controls['login'].value;
-        console.log(credentials)
         this.auth.verification(credentials).subscribe(
             res => {
                 this.Toast.fire({
@@ -46,7 +45,7 @@ export class ConnexionComponent {
                     title: 'Signed in successfully',
                     timer: 2000
                 }).then(
-                    // void this.router.navigate(["/"])
+                    void this.router.navigate(["home/"])
                 )
             }
         )
@@ -56,7 +55,7 @@ export class ConnexionComponent {
         this.loginFormGroup = this.formBuilder.group(
             {
                 login: this.formBuilder.group({
-                    login: new FormControl("", [
+                    email: new FormControl("", [
                         Validators.required,
                         LoginValidator.notOnlyWhiteSpace
                     ]),
@@ -69,8 +68,8 @@ export class ConnexionComponent {
         )
     }
 
-    get login() {
-        return this.loginFormGroup.get("login.login");
+    get email() {
+        return this.loginFormGroup.get("login.email");
     }
 
     get password() {

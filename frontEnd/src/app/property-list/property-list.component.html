@@ -1,10 +1,10 @@
 <div class="property-list-container">
-    <div class="row wrap gap-1 space-between" style="display: flex;
-    justify-content: space-around;" *ngIf="biensList.length;else skeleton">
+    <div class=" wrap gap-1 space-between" style="display: flex;
+    justify-content: space-around;" *ngIf="biens.length;else skeleton">
 
-        <div class="bien-container" *ngFor="let bien of biensList">
+        <div class="bien-container" *ngFor="let bien of biens" routerLink="/home/properties/{{bien.idBien}}">
             <section class="hotel-card">
-                <img class="hotel-image" [src]="bien.image" alt="" routerLink="/properties/{{bien.idBien}}"/>
+                <img class="hotel-image" [src]="bien.image" alt="" />
                 <h2 class="hotel-title">{{ bien.rue }},{{ bien.commune }}</h2>
                 <p class="hotel-description">
                     {{ bien.nbChambres }}<span *ngIf="bien.nbChambres===1;else elseBlock"> Chambre</span>
@@ -18,8 +18,9 @@
                 </div>
             </section>
         </div>
-
     </div>
+    <p-paginator (onPageChange)="onPageChange($event)" [rows]="rows" [totalRecords]="totalRecords"
+                 [rowsPerPageOptions]="rowsPerPage"></p-paginator>
     <ng-template #skeleton>
         <div style="    display: grid;
     grid-template-columns: 1fr 1fr 1fr;justify-items: center">

@@ -6,11 +6,11 @@
                 <form id="form-login" method="post" [formGroup]="loginFormGroup">
                     <div formGroupName="login">
                         <div class="form-element form-stack">
-                            <label for="login" class="form-label">Username</label>
-                            <input id="login" type="text" formControlName="login" name="login" autocomplete="off"/>
-                            <div *ngIf="login?.invalid && (login?.dirty || login?.touched)">
-                                <div *ngIf="login?.errors?.['required'] || login?.errors?.['notOnlyWhiteSpace']" class="error" style="color: crimson">
-                                    login is required
+                            <label for="email" class="form-label">E-mail</label>
+                            <input id="email" type="text" formControlName="email" name="email" autocomplete="off"/>
+                            <div *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+                                <div *ngIf="email?.errors?.['required'] || email?.errors?.['notOnlyWhiteSpace']" class="error" style="color: crimson">
+                                    email is required
                                 </div>
                             </div>
                         </div>
@@ -35,4 +35,6 @@
         </div>
     </div>
 </div>
-
+<div id="back">
+    <div class="backLeft"></div>
+</div>

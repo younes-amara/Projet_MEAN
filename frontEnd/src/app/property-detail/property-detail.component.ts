@@ -1,29 +1,33 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import {Bien} from '../../../types';
 import {BiensService} from '../services/biens.service';
 import {CommonModule} from '@angular/common';
+import {GoogleMap, MapMarker} from "@angular/google-maps";
 
 @Component({
     selector: 'app-property-detail',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, RouterLink, GoogleMap, MapMarker],
     templateUrl: './property-detail.component.html',
     styleUrl: './property-detail.component.scss'
 })
+
+
 export class PropertyDetailComponent implements OnInit {
-    bien: Bien = {
-        "idBien": 1,
-        "commune": "Paris",
-        "rue": "Rue de Rivoli",
-        "cp": "75001",
-        "nbCouchages": 2,
-        "nbChambres": 1,
-        "distance": 1000,
-        "prix": 100,
-        "mail": "john.doe@example.com",
-        "image": "assets/images/image-1.png"
-    };
+
+
+    bien!: Bien;
+    storage: Storage = localStorage;
+
+    mapOptions: google.maps.MapOptions = {
+        center: {lat: 38.9987208, lng: -77.2538699},
+        zoom: 14
+    }
+    marker = {
+        position: {lat: 38.9987208, lng: -77.2538699},
+    }
+
 
     constructor(private route: ActivatedRoute, private biensService: BiensService) {
     }
@@ -45,4 +49,10 @@ export class PropertyDetailComponent implements OnInit {
             );
         }
     }
+
+    persistProperty(bien: Bien) {
+        this.storage.setItem("bien", JSON.stringify(bien));
+    }
+
+
 }

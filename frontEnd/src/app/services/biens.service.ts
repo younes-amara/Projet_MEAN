@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {ApiService} from './api.service';
 import {Bien, Biens, PaginationParams} from '../../../types';
 
@@ -11,17 +11,16 @@ export class BiensService {
 
     private urlBase: string = 'http://localhost:8888/';
 
+    searchData: BehaviorSubject<any> = new BehaviorSubject<any>("");
+
+
     constructor(private apiService: ApiService, private httpClient: HttpClient) {
     }
 
     // Getting products from the API
-    getBiens = (
-        url: string,
-        params: PaginationParams
-    ): Observable<Biens> => {
-        return this.apiService.get(url, {
-            params,
-            responseType: 'json',
+    getBiens(params: PaginationParams) {
+        return this.httpClient.get<Biens>(this.urlBase + "biens", {
+            params
         });
     };
 
@@ -40,9 +39,13 @@ export class BiensService {
         return this.apiService.delete(url, {});
     };
 
-    searchBiens(criteria: any): Observable<any> {
-        return this.httpClient.post(`${this.urlBase}/biens/search`, criteria);
+    searchBiens(criteria: any, params: PaginationParams) {
+
+        return this.httpClient.post<Biens>(`${this.urlBase}biens/search`, criteria, {
+            params
+        })
     }
+
 
     getBienById(id: number): Observable<Bien> {
         const url = `http://localhost:8888/biens/${id}`; // URL de l'API pour récupérer un bien par ID

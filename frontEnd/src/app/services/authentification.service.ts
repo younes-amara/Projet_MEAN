@@ -1,8 +1,9 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {BehaviorSubject, Observable, shareReplay, Subject, tap} from 'rxjs';
 import {Credentials} from "../../../types";
 import {Router} from "@angular/router";
+import {jwtDecode} from "jwt-decode";
 
 
 export const TOKEN_KEY = 'auth-token';
@@ -24,27 +25,23 @@ export class AuthentificationService {
     }
 
     getUser() {
-        return this.user;
-    }
-
-    connect(data: string) {
-        this.user.next(data);
-    }
-
-    disconnect() {
-        this.user.next("");
+        return jwtDecode(this.getToken())
     }
 
     verification(credentials: Credentials): Observable<any> {
         return this.http.post('http://localhost:8888/users/login',
-            JSON.stringify(credentials), httpOptions);
+            JSON.stringify(credentials), httpOptions).pipe(
+            shareReplay(1),
+            tap(res => {
+                this.saveToken(res);
+            }));
     }
 
     saveToken(token: any) {
-        window.localStorage.removeItem(TOKEN_KEY);
-        window.localStorage.setItem(TOKEN_KEY, JSON.stringify(token));
-    }
 
+        window.localStorage.removeItem(TOKEN_KEY);
+        window.localStorage.setItem(TOKEN_KEY, JSON.stringify(token.token));
+    }
 
 
     public isTokenExpired() {
@@ -57,14 +54,17 @@ export class AuthentificationService {
     }
 
     getToken() {
+
         let token = window.localStorage.getItem(TOKEN_KEY);
-        return token ? JSON.parse(token).access_token : null;
+        return token ? JSON.parse(token) : null;
+
     }
 
     signOut() {
         window.localStorage.removeItem(TOKEN_KEY);
-        this.router.navigateByUrl("/properties");
+        this.router.navigateByUrl("/login");
     }
+
     isLoggedIn() {
         return this.getToken() === null;
     }

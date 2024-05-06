@@ -24,8 +24,8 @@ export const routes: Routes = [
         children: [
             {path: 'book', component: BookingComponent},
             {path: 'bookings', component: ReservationListComponent},
-            {path: '', redirectTo: "book", pathMatch: "full"},
-            {path: "**", redirectTo: "book", pathMatch: "full"}
+            {path: '', redirectTo: "bookings", pathMatch: "full"},
+            {path: "**", redirectTo: "bookings", pathMatch: "full"}
         ]
     },
     {path: 'login', component: ConnexionComponent},

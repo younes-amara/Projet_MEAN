@@ -20,4 +20,9 @@ export class LocationService {
         const url = `http://localhost:8888/locations/${user}`
         return this.httpClient.get(url);
     }
+
+    updateAvis(idLocation: any, avis: any) {
+        const url = `http://localhost:8888/locations/update-avis`
+        return this.httpClient.post(url, {idLocation: idLocation, avis: avis})
+    }
 }

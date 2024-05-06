@@ -23,6 +23,17 @@ import {AuthentificationService} from "../../services/authentification.service";
 })
 export class BookingComponent implements OnInit {
 
+    Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
 
     constructor(private router: Router, private locationService: LocationService, private authService: AuthentificationService) {
 
@@ -50,10 +61,30 @@ export class BookingComponent implements OnInit {
                 this.reservation.idBien = this.bien.idBien
                 this.locationService.book(this.reservation).subscribe(
                     () => {
-                        this.storage.removeItem("bien")
-                        this.router.navigateByUrl("/dashboard/bookings")
+                        this.storage.removeItem("bien");
+                        this.Toast.fire({
+                            icon: 'success',
+                            title: 'Reservation added successfully',
+                            timer: 2000
+                        }).then(
+                            void this.router.navigate(["dashboard/bookings"])
+                        )
+                    },
+                    err => {
+                        this.Toast.fire({
+                            icon: 'error',
+                            title: 'Deja reserver',
+                            timer: 3000
+                        })
                     }
                 )
+            } else {
+                this.Toast.fire({
+                    icon: 'error',
+                    title: 'Date debut inferieur a date fin',
+                    timer: 3000
+                })
+
             }
         }
     }

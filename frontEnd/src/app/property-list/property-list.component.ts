@@ -33,7 +33,8 @@ export class PropertyListComponent implements OnInit {
 
     fetchBiens(page: number, perPage: number) {
 
-        if (this.router.url.indexOf("/home/seach")) {
+        if (this.router.url.indexOf('/home/search') > -1) {
+
             this.biensService.searchData.subscribe(res => {
                     this.biensService.searchBiens(res, {page, perPage}).subscribe(data => {
                         this.biens = data.items;
@@ -62,7 +63,6 @@ export class PropertyListComponent implements OnInit {
         }, 2000);
 
     }
-
 
 
 }

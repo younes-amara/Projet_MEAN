@@ -5,6 +5,8 @@ import {ConnexionComponent} from "./connexion/connexion.component";
 import {HomeComponent} from "./home/home.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {BookingComponent} from "./dashboard/booking/booking.component";
+import {canActivate, canActivateChild} from "./_guards/auth.guard";
+import {ReservationListComponent} from "./dashboard/reservation-list/reservation-list.component";
 
 export const routes: Routes = [
     {
@@ -18,9 +20,10 @@ export const routes: Routes = [
         ]
     },
     {
-        path: 'dashboard', component: DashboardComponent,
+        path: 'dashboard', component: DashboardComponent, canActivate: [canActivate],canActivateChild:[canActivateChild],
         children: [
             {path: 'book', component: BookingComponent},
+            {path: 'bookings', component: ReservationListComponent},
             {path: '', redirectTo: "book", pathMatch: "full"},
             {path: "**", redirectTo: "book", pathMatch: "full"}
         ]

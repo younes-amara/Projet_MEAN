@@ -20,11 +20,55 @@ router.get("/", async (req, res) => {
 
     const db = req.app.locals.db;
 
-    try {
-        // Récupère tous les biens depuis la base de données
-        const biens = await db.collection("Biens").find().toArray();
 
-        // Calcule les données de pagination
+    try {
+
+        const biens = await db.collection('Biens').aggregate([
+            {
+                $lookup: {
+                    from: "Locations",
+                    localField: "idBien",
+                    foreignField: "idBien",
+                    as: "rentals"
+                }
+            },
+            {
+                $unwind: {path: "$rentals", preserveNullAndEmptyArrays: true}
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    idBien: {$first: "$idBien"},
+                    commune: {$first: "$commune"},
+                    rue: {$first: "$rue"},
+                    cp: {$first: "$cp"},
+                    nbCouchages: {$first: "$nbCouchages"},
+                    nbChambres: {$first: "$nbChambres"},
+                    distance: {$first: "$distance"},
+                    prix: {$first: "$prix"},
+                    mail: {$first: "$mail"},
+                    image: {$first: "$image"},
+                    averageAvis: {$avg: "$rentals.avis"} // calculate average avis
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    idBien: 1,
+                    commune: 1,
+                    rue: 1,
+                    cp: 1,
+                    nbCouchages: 1,
+                    nbChambres: 1,
+                    distance: 1,
+                    prix: 1,
+                    mail: 1,
+                    image: 1,
+                    averageAvis: {$ifNull: ["$averageAvis", 0]} // handle null average avis values
+                }
+            }
+        ]).toArray();
+
         const start = page * perPage;
         const end = start + perPage;
 
@@ -49,20 +93,48 @@ router.get("/", async (req, res) => {
 
 // GET a specific bien by id
 router.get("/:id", async (req, res) => {
-    const db = req.app.locals.db;
-    const bienId = parseInt(req.params.id);
-    try {
-        const bien = await db.collection("Biens").findOne({idBien: bienId});
-        if (!bien) {
-            res.status(404).json({error: "Bien not found"});
-            return;
+        const db = req.app.locals.db;
+        const idBien = parseInt(req.params.id);
+        try {
+
+            const averageAvis = await db.collection("Locations").aggregate([
+                {$group: {_id: "$idBien", averageAvis: {$avg: "$avis"}}},
+                {$match: {_id: parseInt(idBien)}}
+            ]).toArray();
+
+
+            const bien = await db.collection("Biens").findOne({idBien: idBien});
+
+            if (!bien) {
+                res.status(404).json({error: "Bien not found"});
+                return;
+            }
+            if (bien) {
+                const output = {
+                    idBien: bien.idBien,
+                    commune: bien.commune,
+                    rue: bien.rue,
+                    cp: bien.cp,
+                    nbCouchages: bien.nbCouchages,
+                    nbChambres: bien.nbChambres,
+                    distance: bien.distance,
+                    prix: bien.prix,
+                    mail: bien.mail,
+                    image: bien.image,
+                    lat: bien.lat,
+                    lng: bien.lng,
+                    averageAvis: averageAvis.length > 0 ? averageAvis[0].averageAvis : 0
+                };
+                res.json(output);
+            }
+        } catch
+            (error) {
+            console.error("Error fetching bien:", error);
+            res.status(500).json({error: "Internal server error"});
         }
-        res.json(bien);
-    } catch (error) {
-        console.error("Error fetching bien:", error);
-        res.status(500).json({error: "Internal server error"});
     }
-});
+)
+;
 
 
 // POST new bien

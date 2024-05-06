@@ -4,7 +4,7 @@
 
         <div class="bien-container" *ngFor="let bien of biens" routerLink="/home/properties/{{bien.idBien}}">
             <section class="hotel-card">
-                <img class="hotel-image" [src]="bien.image" alt="" />
+                <img class="hotel-image" [src]="bien.image" alt=""/>
                 <h2 class="hotel-title">{{ bien.rue }},{{ bien.commune }}</h2>
                 <p class="hotel-description">
                     {{ bien.nbChambres }}<span *ngIf="bien.nbChambres===1;else elseBlock"> Chambre</span>
@@ -12,9 +12,7 @@
                 </p>
                 <div class="hotel-book">
                     <span class="hotel-price">{{ bien.prix | currency:'EUR' }} <span style="font-weight: normal">par nuit</span></span>
-                    <a href="" class="hotel-book-link" routerLink="">
-                        Réserver
-                    </a>
+                    <p-rating [(ngModel)]="bien.averageAvis" [readonly]="true" [cancel]="false"/>
                 </div>
             </section>
         </div>

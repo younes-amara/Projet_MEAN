@@ -34,4 +34,5 @@ export class DashboardComponent implements OnInit {
     getUser() {
         this.user = this.authService.getUser();
     }
+    
 }

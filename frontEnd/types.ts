@@ -45,7 +45,10 @@ export interface Bien {
     distance: number;
     prix: number;
     mail: string;
-    image: string; // Chemin vers l'image (par exemple, "assets/images/image-X.jpg")
+    image: string;
+    averageAvis: number;
+    lat: number;
+    lng: number;
 }
 
 

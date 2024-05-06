@@ -13,7 +13,11 @@ export class LocationService {
 
     book(criteria: any) {
         const url = 'http://localhost:8888/locations/'
-        this.httpClient.post(url, criteria);
+        return this.httpClient.post(url, criteria);
     }
 
+    getBookingList(user: any) {
+        const url = `http://localhost:8888/locations/${user}`
+        return this.httpClient.get(url);
+    }
 }

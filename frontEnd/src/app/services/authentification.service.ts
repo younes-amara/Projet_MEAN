@@ -62,7 +62,7 @@ export class AuthentificationService {
 
     signOut() {
         window.localStorage.removeItem(TOKEN_KEY);
-        this.router.navigateByUrl("/login");
+        this.router.navigateByUrl("/");
     }
 
     isLoggedIn() {

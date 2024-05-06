@@ -83,12 +83,14 @@ router.post("/login", async (req, res) => {
     const {email, password} = req.body;
 
     try {
+
         const user = await db.collection("Utilisateurs").findOne({mail: email});
         if (!user) {
             return res.status(401).json({error: "Email ou mot de passe incorrect"});
         }
 
         const passwordMatch = await bcrypt.compare(password, user.password);
+
         if (!passwordMatch) {
             return res.status(401).json({error: 'Authentication failed'});
         }

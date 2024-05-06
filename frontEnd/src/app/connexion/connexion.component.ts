@@ -20,10 +20,14 @@ import Swal from "sweetalert2";
     templateUrl: './connexion.component.html',
     styleUrls: ['./connexion.component.scss']
 })
-export class ConnexionComponent implements OnInit{
+export class ConnexionComponent implements OnInit {
     loginFormGroup!: FormGroup;
 
-    constructor(private router:Router,private formBuilder: FormBuilder, private auth: AuthentificationService) {
+    constructor(private router: Router, private formBuilder: FormBuilder, private auth: AuthentificationService) {
+        if (!this.auth.isLoggedIn())
+            void this.router.navigate(["dashboard/"]);
+
+
     }
 
     ngOnInit(): void {
@@ -45,7 +49,7 @@ export class ConnexionComponent implements OnInit{
                     title: 'Signed in successfully',
                     timer: 2000
                 }).then(
-                    void this.router.navigate(["home/"])
+                    void this.router.navigate(["dashboard/"])
                 )
             }
         )

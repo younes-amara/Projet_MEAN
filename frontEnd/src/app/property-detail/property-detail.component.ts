@@ -4,6 +4,7 @@ import {Bien} from '../../../types';
 import {BiensService} from '../services/biens.service';
 import {CommonModule} from '@angular/common';
 import {GoogleMap, MapMarker} from "@angular/google-maps";
+import {data} from "autoprefixer";
 
 @Component({
     selector: 'app-property-detail',
@@ -20,13 +21,8 @@ export class PropertyDetailComponent implements OnInit {
     bien!: Bien;
     storage: Storage = localStorage;
 
-    mapOptions: google.maps.MapOptions = {
-        center: {lat: 38.9987208, lng: -77.2538699},
-        zoom: 14
-    }
-    marker = {
-        position: {lat: 38.9987208, lng: -77.2538699},
-    }
+    mapOptions!: google.maps.MapOptions
+    marker: any
 
 
     constructor(private route: ActivatedRoute, private biensService: BiensService) {
@@ -38,6 +34,7 @@ export class PropertyDetailComponent implements OnInit {
             this.getPropertyDetails()
         );
 
+
     }
 
     getPropertyDetails() {
@@ -45,8 +42,18 @@ export class PropertyDetailComponent implements OnInit {
         if (hasPropertyId) {
             const propertyId: number = +this.route.snapshot.paramMap.get("id")!;
             this.biensService.getBienById(propertyId).subscribe(
-                data => this.bien = data
-            );
+                data => {
+                    this.bien = data;
+                    this.mapOptions = {
+                        center: {lat: this.bien.lat, lng: this.bien.lng},
+                        zoom: 14
+                    }
+
+                    this.marker = {
+                        position: {lat: this.bien.lat, lng: this.bien.lat},
+                    }
+                }
+            )
         }
     }
 

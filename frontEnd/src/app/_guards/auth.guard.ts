@@ -9,7 +9,7 @@ export const canActivate: CanActivateFn = (
     const authService = inject(AuthentificationService);
     const router = inject(Router);
 
-    if (authService.isLoggedIn() || !authService.isTokenExpired()) {
+    if (!authService.isLoggedIn() && !authService.isTokenExpired()) {
         return true
     }
     return router.createUrlTree(['/login']);
